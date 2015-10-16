@@ -1,0 +1,16 @@
+
+ex1/octave-workspace
+
+*.gz
+
+common/t10k-images-idx3-ubyte
+
+common/t10k-labels-idx1-ubyte
+
+common/train-images-idx3-ubyte
+
+common/train-labels-idx1-ubyte
+
+*.mex
+
+common/minFunc_2012/octave-workspace

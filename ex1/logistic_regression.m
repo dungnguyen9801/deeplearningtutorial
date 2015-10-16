@@ -7,12 +7,10 @@ function [f,g] = logistic_regression(theta, X,y)
   %   y - The label for each example.  y(j) is the j'th example's label.
   %
 
-  m=size(X,2);
-  
   % initialize objective value and gradient.
-  f = 0;
-  g = zeros(size(theta));
-
+  hx = (1 + exp(-theta'*X)).^(-1);
+  f = -(y*log(hx') + (1-y)*log(1-hx'));
+  g = X*(hx-y)';
 
   %
   % TODO:  Compute the objective function by looping over the dataset and summing

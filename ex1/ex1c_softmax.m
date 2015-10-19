@@ -37,7 +37,7 @@ theta = rand(n,num_classes-1)*0.001;
 % file using a vectorized implementation.
 %
 tic;
-num_checks = 5;
+num_checks = 20;
 grad_error = grad_check(@softmax_regression_vec, theta(:), num_checks, train.X, train.y);
 grad_error_threshold = 0.001;
 assert(grad_error<grad_error_threshold, ["grad error = ", num2str(grad_error), " is more than threshold =", num2str(grad_error_threshold)]);

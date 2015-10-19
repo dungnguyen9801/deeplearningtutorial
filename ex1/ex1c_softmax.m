@@ -37,6 +37,11 @@ theta = rand(n,num_classes-1)*0.001;
 % file using a vectorized implementation.
 %
 tic;
+num_checks = 5;
+grad_error = grad_check(@softmax_regression_vec, theta(:), num_checks, train.X, train.y);
+grad_error_threshold = 0.001;
+assert(grad_error<grad_error_threshold, ["grad error = ", num2str(grad_error), " is more than threshold =", num2str(grad_error_threshold)]);
+disp(grad_error);
 theta(:)=minFunc(@softmax_regression_vec, theta(:), options, train.X, train.y);
 fprintf('Optimization took %f seconds.\n', toc);
 theta=[theta, zeros(n,1)]; % expand theta to include the last class.

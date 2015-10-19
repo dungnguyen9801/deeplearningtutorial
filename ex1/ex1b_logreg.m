@@ -30,6 +30,11 @@ theta = rand(n,1)*0.001;
 % TODO:  Implement batch logistic regression in the logistic_regression.m file!
 %
 tic;
+num_checks = 100;
+grad_error = grad_check(@logistic_regression, theta, num_checks, train.X, train.y);
+theta = minFunc(@linear_regression, theta, options, train.X, train.y);
+grad_error_threshold = 0.0001;
+assert(grad_error<grad_error_threshold, ["grad error = ", num2str(grad_error), " is more than threshold =", num2str(grad_error_threshold)]);
 theta=minFunc(@logistic_regression, theta, options, train.X, train.y);
 fprintf('Optimization took %f seconds.\n', toc);
 

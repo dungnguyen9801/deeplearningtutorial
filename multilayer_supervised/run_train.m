@@ -10,9 +10,15 @@ ei = [];
 % minfunc and mnist data helpers
 addpath ../common;
 addpath(genpath('../common/minFunc_2012/minFunc'));
+addpath ../ex1;
 
 %% load mnist data
 [data_train, labels_train, data_test, labels_test] = load_preprocess_mnist();
+
+%%cropping the data
+maxSamples = 100;
+data_train = data_train(:,1:maxSamples);
+labels_train = labels_train(1:maxSamples,:);
 
 %% populate ei with the network architecture to train
 % ei is a structure you can use to store hyperparameters of the network
@@ -27,7 +33,7 @@ ei.output_dim = 10;
 % sizes of all hidden layers and the output layer
 ei.layer_sizes = [256, ei.output_dim];
 % scaling parameter for l2 weight regularization penalty
-ei.lambda = 0;
+ei.lambda = 1;
 % which type of activation function to use in hidden layers
 % feel free to implement support for only the logistic sigmoid function
 ei.activation_fun = 'logistic';
@@ -43,6 +49,13 @@ options.maxFunEvals = 1e6;
 options.Method = 'lbfgs';
 
 %% run training
+num_checks = 5;
+grad_error = grad_check(@supervised_dnn_cost, ...
+    params,num_checks,ei, data_train, labels_train);
+grad_error_threshold = 0.0001;
+assert(grad_error<grad_error_threshold, ["grad error = ", num2str(grad_error), " is more than threshold =", num2str(grad_error_threshold)]);
+disp(grad_error);
+
 [opt_params,opt_value,exitflag,output] = minFunc(@supervised_dnn_cost,...
     params,options,ei, data_train, labels_train);
 

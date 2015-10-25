@@ -8,7 +8,7 @@ function [f,g] = logistic_regression(theta, X,y)
   %
 
   % initialize objective value and gradient.
-  hx = (1 + exp(-theta'*X)).^(-1);
+  hx = 1./(1 + exp(-theta'*X));
   f = -(y*log(hx') + (1-y)*log(1-hx'));
   g = X*(hx-y)';
 

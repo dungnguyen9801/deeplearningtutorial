@@ -21,7 +21,7 @@ params = [];
 for d = 1:numel(stack)
     % This can be optimized. But since our stacks are relatively short, it
     % is okay
-    params = [params ; stack{d}.W(:) ; stack{d}.b(:) ];
+    params = [params ; stack{d}.b(:); stack{d}.W(:) ];
     
     % Check that stack is of the correct form
     assert(size(stack{d}.W, 1) == size(stack{d}.b, 1), ...

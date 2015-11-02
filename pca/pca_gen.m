@@ -73,7 +73,7 @@ end
 xTilde = U(:,1:k)'*x;
 u = zeros(size(x,1) - size(xTilde,1), size(x,2));
 xTilde = [xTilde;u];
-xApprox = U*xTilde;
+xHat = U*xTilde;
 
 % Visualise the data, and compare it to the raw data
 % You should observe that the raw and processed data are of comparable quality.
@@ -130,6 +130,6 @@ xZCAwhite = U * xPCAwhite;
 % Visualise the data, and compare it to the raw data.
 % You should observe that the whitened images have enhanced edges.
 figure('name','ZCA whitened images');
-display_network(xZCAhite(:,randsel));
+display_network(xZCAwhite(:,randsel));
 figure('name','Raw images');
 display_network(x(:,randsel));

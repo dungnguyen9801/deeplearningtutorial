@@ -16,9 +16,9 @@ addpath ../ex1;
 [data_train, labels_train, data_test, labels_test] = load_preprocess_mnist();
 
 %%cropping the data
-%maxSamples = 1e9;
-%data_train = data_train(:,1:maxSamples);
-%labels_train = labels_train(1:maxSamples,:);
+maxSamples = 1000;
+data_train = data_train(:,1:maxSamples);
+labels_train = labels_train(1:maxSamples,:);
 
 %% populate ei with the network architecture to train
 % ei is a structure you can use to store hyperparameters of the network

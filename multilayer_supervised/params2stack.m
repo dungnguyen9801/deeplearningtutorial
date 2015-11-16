@@ -26,15 +26,15 @@ for d = 1:depth
 
     hidden = ei.layer_sizes(d);
 
-    % Extract bias
-    blen = hidden;
-    stack{d}.b = reshape(params(cur_pos:cur_pos+blen-1), hidden, 1);
-    cur_pos = cur_pos+blen;
-
     % Extract weights
     wlen = double(hidden * prev_size);
     stack{d}.W = reshape(params(cur_pos:cur_pos+wlen-1), hidden, prev_size);
     cur_pos = cur_pos+wlen;
+
+    % Extract bias
+    blen = hidden;
+    stack{d}.b = reshape(params(cur_pos:cur_pos+blen-1), hidden, 1);
+    cur_pos = cur_pos+blen;
     
     % Set previous layer size
     prev_size = hidden;

@@ -66,7 +66,9 @@ for e = 1:epochs
         % Then update the current weights theta according to the
         % sgd update rule
         
-        %%% YOUR CODE HERE %%%
+        velocity = mom*velocity + alpha*grad;
+        
+        theta = theta - velocity;
         
         fprintf('Epoch %d: Cost on iteration %d is %f\n',e,it,cost);
     end;

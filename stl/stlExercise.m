@@ -13,6 +13,7 @@
 %  allow your RICA to get good filters; you do not need to 
 %  change the parameters below.
 addpath(genpath('..'))
+addpath(genpath('../rica/'))
 imgSize = 28;
 global params;
 params.patchWidth=9;           % width of a patch
@@ -74,18 +75,22 @@ randTheta = randTheta(:);
 
 % subsample random patches from the unlabelled+training data
 patches = samplePatches([unlabeledData,trainData],params.patchWidth,200000);
+patches = zca2(patches);
+m = sqrt(sum(patches.^2) + (1e-8));
+x = bsxfunwrap(@rdivide,patches,m);
 
 %configure minFunc
 options.Method = 'lbfgs';
 options.MaxFunEvals = Inf;
 options.MaxIter = 1000;
 % You'll need to replace this line with RICA training code
-opttheta = randTheta;
+% optimize
 
 %  Find opttheta by running the RICA on all the training patches.
 %  You will need to whitened the patches with the zca2 function 
 %  then call minFunc with the softICACost function as seen in the RICA exercise.
-%%% YOUR CODE HERE %%%
+
+[opttheta, cost, exitflag] = minFunc( @(theta) softICACost(theta, x, params), randTheta, options); % Use x or xw
 
 % reshape visualize weights
 W = reshape(opttheta, params.numFeatures, params.n);

@@ -15,17 +15,18 @@ display_network(x(:,randsel));
 %% Step 0b: Zero-mean the data (by row)
 %  You can make use of the mean and repmat/bsxfun functions.
 
-x = x - sum(x)/size(x,1);
+avg = mean(x, 1);
+x = x - repmat(avg, size(x, 1), 1);
 
 %%================================================================
 %% Step 1a: Implement PCA to obtain xRot
 %  Implement PCA to obtain xRot, the matrix in which the data is expressed
 %  with respect to the eigenbasis of sigma, which is the matrix U.
 
-sigma = 1/size(x,2) * x*x';
-[U,S,V] = svd(sigma);
-xRot = U'*x;
-xRotWhite = xRot - sum(xRot)/size(xRot,1);
+m = size(x,2);
+sigma = 1/m*x*x';
+[u,s,v] = svd(sigma);
+xRot = u'*x;
 
 %%================================================================
 %% Step 1b: Check your implementation of PCA
@@ -36,7 +37,7 @@ xRotWhite = xRot - sum(xRot)/size(xRot,1);
 %  When visualised as an image, you should see a straight line across the
 %  diagonal (non-zero entries) against a blue background (zero entries).
 
-covar = 1/size(xRotWhite,2) * xRotWhite*xRotWhite';
+covar = 1/m*xRot * xRot';
 
 % Visualise the covariance matrix. You should see a line across the
 % diagonal against a blue background.
@@ -49,11 +50,11 @@ imagesc(covar);
 %  to retain at least 99% of the variance.
 
 take = 0;
-ttl = sum(sum(S));
+ttl = sum(diag(s));
 k = 0;
 while (take < .99 * ttl)
   k = k + 1;
-  take = take + S(k,k);
+  take = take + s(k,k);
 end
 
 %%================================================================
@@ -70,10 +71,9 @@ end
 %  there is little loss due to throwing away the principal components that
 %  correspond to dimensions with low variation.
 
-xTilde = U(:,1:k)'*x;
-u = zeros(size(x,1) - size(xTilde,1), size(x,2));
-xTilde = [xTilde;u];
-xHat = U*xTilde;
+uHat = zeros(size(u));
+uHat(:,1:k) = u(:,1:k);
+xHat = u*uHat'*x;
 
 % Visualise the data, and compare it to the raw data
 % You should observe that the raw and processed data are of comparable quality.
@@ -93,8 +93,8 @@ display_network(x(:,randsel));
 epsilon = 1e-1; 
 diagReg = diag(1./sqrt(diag(S) + epsilon));
 diagNoReg = diag(1./sqrt(diag(S)));
-xPCAwhite = diagReg*U'*x;
-xPCAwhiteNoReg = diagNoReg*U'*x;
+xPCAwhite = diagReg*u'*x;
+xPCAwhiteNoReg = diagNoReg*u'*x;
 
 %% Step 4b: Check your implementation of PCA whitening 
 %  Check your implementation of PCA whitening with and without regularisation. 
@@ -125,7 +125,7 @@ imagesc(covarReg);
 %  Visualise the data and compare it to the raw data. You should observe
 %  that whitening results in, among other things, enhanced edges.
 
-xZCAwhite = U * xPCAwhite;
+xZCAwhite = u * xPCAwhite;
 
 % Visualise the data, and compare it to the raw data.
 % You should observe that the whitened images have enhanced edges.
